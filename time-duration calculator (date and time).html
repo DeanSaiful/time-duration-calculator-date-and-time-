@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Time Duration Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="datetime-local"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Time Duration Calculator</h2>
+    <label for="start-time">Start Time:</label>
+    <input type="datetime-local" id="start-time" step="1">
+    <label for="end-time">End Time:</label>
+    <input type="datetime-local" id="end-time" step="1">
+    <button onclick="calculateDuration()">Calculate Duration</button>
+    <button onclick="clearForm()">Clear</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function formatDateTime(dateTime) {
+      const date = dateTime.toISOString().split('T')[0];
+      const time = dateTime.toTimeString().split(' ')[0];
+      return `${date} ${time}`;
+    }
+
+    function calculateDuration() {
+      const startTime = document.getElementById('start-time').value;
+      const endTime = document.getElementById('end-time').value;
+
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+
+      const durationMs = endDate - startDate;
+
+      const hours = Math.floor(durationMs / (1000 * 60 * 60));
+      const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((durationMs % (1000 * 60)) / 1000);
+
+      const decimalHours = durationMs / (1000 * 60 * 60);
+      const decimalMinutes = durationMs / (1000 * 60);
+      const formattedSeconds = new Intl.NumberFormat().format(seconds);
+
+      const result = document.getElementById('result');
+      result.innerHTML = `
+        The time between ${formatDateTime(startDate)} and ${formatDateTime(endDate)} is:<br>
+        ${hours} hours, ${minutes} minutes, and ${formattedSeconds} seconds<br>
+        ${decimalHours.toFixed(3)} hours<br>
+        ${decimalMinutes.toFixed(2)} minutes<br>
+        ${durationMs} milliseconds
+      `;
+    }
+
+    function clearForm() {
+      document.getElementById('start-time').value = '';
+      document.getElementById('end-time').value = '';
+      document.getElementById('result').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
